@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>io.marella.sunday</groupId>
+  <artifactId>sunday-test</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <packaging>war</packaging>
+  <name>sunday-test</name>
+
+  <properties>
+    <!-- Global Maven settings -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- The default value changed to `false` since maven-war-plugin 3.0.0 -->
+    <!--<failOnMissingWebXml>false</failOnMissingWebXml> -->
+
+    <!-- Official Maven Plugins -->
+    <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
+    <maven-war-plugin.version>3.3.2</maven-war-plugin.version>
+    <maven-dependency-plugin.version>3.3.0</maven-dependency-plugin.version>
+    <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
+    <maven-failsafe-plugin.version>3.0.0-M7</maven-failsafe-plugin.version>
+    <maven-surefire-report-plugin.version>3.0.0-M7</maven-surefire-report-plugin.version>
+
+    <!-- Cargo maven plugin -->
+    <cargo-maven3-plugin.version>1.9.11</cargo-maven3-plugin.version>
+
+    <!-- Jakarta EE API -->
+    <jakartaee-api.version>8.0.0</jakartaee-api.version>
+
+<!--    &lt;!&ndash; Arquillian BOM &ndash;&gt;-->
+<!--    <arquillian-bom.version>1.6.0.Final</arquillian-bom.version>-->
+
+    <!-- Test Utilities -->
+    <junit.version>4.13.2</junit.version>
+    <mockito.version>4.6.1</mockito.version>
+    <json-path.version>2.7.0</json-path.version>
+    <awaitility.version>4.2.0</awaitility.version>
+    <hamcrest.version>2.2</hamcrest.version>
+    <jsonassert.version>1.5.0</jsonassert.version>
+    <assertj.version>3.23.1</assertj.version>
+
+    <!-- Wildfly server -->
+    <wildfly.version>26.1.1.Final</wildfly.version>
+    <wildfly-maven-plugin.version>3.0.0.Final</wildfly-maven-plugin.version>
+    <!-- Only WildFly embedded adapter 4.0.0.Alpha1 works with WildFly 24+ -->
+    <wildfly-arquillian.version>4.0.0.Alpha4</wildfly-arquillian.version>
+    <!-- websockets-jsr and resteasy for client, aligned with Wildfly version. -->
+    <undertow-websockets-jsr.version>2.1.3.Final</undertow-websockets-jsr.version>
+    <resteasy.version>4.6.0.Final</resteasy.version>
+
+    <!-- By default, skip tests -->
+    <skipTests>true</skipTests>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+  <dependencyManagement>
+    <dependencies>
+
+      <dependency>
+        <groupId>com.fasterxml.jackson.datatype</groupId>
+        <artifactId>jackson-datatype-jsr310</artifactId>
+        <version>2.6.0</version>
+      </dependency>
+
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <!-- https://mvnrepository.com/artifact/org.assertj/assertj-core -->
+      <dependency>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-core</artifactId>
+        <version>${assertj.version}</version>
+        <scope>test</scope>
+      </dependency>
+
+
+
+      <!-- Mockito -->
+      <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>${mockito.version}</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  <dependencies>
+
+
+    <dependency>
+      <groupId>javax</groupId>
+      <artifactId>javaee-api</artifactId>
+      <version>8.0.1</version>
+      <scope>provided</scope>
+    </dependency>
+
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.9.0-M1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <version>4.6.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.core</groupId>
+      <artifactId>jersey-common</artifactId>
+      <version>2.22.2</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- SWAGGER -->
+    <dependency>
+      <groupId>io.swagger.core.v3</groupId>
+      <artifactId>swagger-core</artifactId>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>io.swagger.core.v3</groupId>
+      <artifactId>swagger-annotations</artifactId>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>io.swagger.core.v3</groupId>
+      <artifactId>swagger-jaxrs2</artifactId>
+      <version>2.2.1</version>
+    </dependency>
+
+    <!-- HIBERNATE -->
+
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>5.3.2.Final</version>
+    </dependency>
+
+    <!-- -->
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>2.1.214</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>2.17.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>2.17.2</version>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <finalName>${project.artifactId}</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler-plugin.version}</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>${maven-war-plugin.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven-surefire-plugin.version}</version>
+        <configuration>
+          <skipTests>${skipTests}</skipTests>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>test</phase>
+            <id>default-test</id>
+            <configuration>
+              <excludes>
+                <exclude>**/it/**</exclude>
+              </excludes>
+              <reportsDirectory>
+                ${project.build.directory}/test-reports/unit
+              </reportsDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>${maven-failsafe-plugin.version}</version>
+        <configuration>
+          <skipITs>${skipTests}</skipITs>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>integration-test</phase>
+            <id>integration-test</id>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+            <configuration>
+              <trimStackTrace>false</trimStackTrace>
+              <includes>
+                <include>**/it/**</include>
+              </includes>
+              <reportsDirectory>
+                ${project.build.directory}/test-reports/it
+              </reportsDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+  </build>
+
+</project>
